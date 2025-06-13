@@ -53,7 +53,7 @@ A powerful web-based chiptune music composer that brings the nostalgic sounds of
 ### Quick Start
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/ninefingerwoodshop/chiptune-composer.git
+   git clone https://github.com/ninefingerwoodshop/Chip-Tune-Composer.git
    cd chiptune-composer
    ```
 
@@ -192,9 +192,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Live Demo**: [Try Chiptune Composer](https://ninefingerwoodshop.github.io/chiptune-composer)
-- **Issues**: [Report bugs or request features](https://github.com/ninefingerwoodshop/chiptune-composer/issues)
-- **Discussions**: [Join the community](https://github.com/ninefingerwoodshop/chiptune-composer/discussions)
+- **Live Demo**: [Try Chiptune Composer](https://ninefingerwoodshop.github.io/Chip-Tune-Composer)
+- **Issues**: [Report bugs or request features](https://github.com/ninefingerwoodshop/Chip-Tune-Composer/issues)
+- **Discussions**: [Join the community](https://github.com/ninefingerwoodshop/Chip-Tune-Composer/discussions)
 
 ---
 
