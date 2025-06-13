@@ -2,7 +2,7 @@
 
 A powerful web-based chiptune music composer that brings the nostalgic sounds of 8-bit video games to your browser. Create authentic retro music with a comprehensive sequencer, pattern chain system, and advanced swing/groove controls.
 
-![Chiptune Composer Screenshot](https://via.placeholder.com/800x400/1a1a2e/4fc3f7?text=Chiptune+Composer+Interface)
+![chiptune](https://github.com/user-attachments/assets/1dd9bc06-eb29-46c2-8869-7a75b82e5f98)
 
 ## ✨ Features
 
