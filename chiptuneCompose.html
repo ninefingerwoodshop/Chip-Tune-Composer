@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" href="data:," />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chiptune Composer</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.0/lame.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Courier New", monospace;
+        background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+        color: #ffffff;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        color: #4fc3f7;
+        font-size: 2.5em;
+        margin: 0;
+        text-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
+      }
+
+      .controls {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin: 20px 0;
+        flex-wrap: wrap;
+      }
+
+      button {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: inherit;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .composer {
+        max-width: 1400px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .track {
+        margin: 20px 0;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+        padding: 15px;
+        border-left: 4px solid;
+      }
+
+      .track:nth-child(1) {
+        border-left-color: #ff6b6b;
+      }
+      .track:nth-child(2) {
+        border-left-color: #4ecdc4;
+      }
+      .track:nth-child(3) {
+        border-left-color: #45b7d1;
+      }
+      .track:nth-child(4) {
+        border-left-color: #96ceb4;
+      }
+      .track:nth-child(5) {
+        border-left-color: #feca57;
+      }
+      .track:nth-child(6) {
+        border-left-color: #ff9ff3;
+      }
+
+      .track-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+      }
+
+      .track-name {
+        font-size: 1.2em;
+        font-weight: bold;
+        min-width: 80px;
+      }
+
+      .track-controls {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      select,
+      input[type="number"],
+      input[type="range"] {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
+        padding: 5px 10px;
+        font-family: inherit;
+      }
+
+      .sequencer {
+        display: grid;
+        grid-template-columns: repeat(32, 1fr);
+        gap: 2px;
+        margin-top: 10px;
+      }
+
+      .step {
+        width: 30px;
+        height: 30px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 3px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7em;
+        transition: all 0.2s ease;
+        position: relative;
+      }
+
+      .step:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .step.active {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        font-weight: bold;
+      }
+
+      .step.playing {
+        box-shadow: 0 0 10px #feca57, inset 0 0 10px rgba(254, 202, 87, 0.3);
+        animation: pulse 0.2s ease;
+      }
+
+      @keyframes pulse {
+        0% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.1);
+        }
+        100% {
+          transform: scale(1);
+        }
+      }
+
+      .note-selector {
+        margin: 10px 0;
+        display: flex;
+        gap: 5px;
+        flex-wrap: wrap;
+      }
+
+      .note-btn {
+        padding: 5px 10px;
+        font-size: 0.9em;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: white;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+      }
+
+      .note-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+
+      .note-btn.selected {
+        background: #4fc3f7;
+        border-color: #4fc3f7;
+      }
+
+      .tempo-section {
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 10px;
+      }
+
+      .tempo-display {
+        font-size: 1.5em;
+        color: #feca57;
+        margin: 10px 0;
+      }
+
+      .step-counter {
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.6em;
+        color: rgba(255, 255, 255, 0.5);
+      }
+
+      .step:nth-child(4n + 1) {
+        border-left: 2px solid #feca57;
+      }
+
+      .track-mute {
+        background: #ff6b6b !important;
+      }
+
+      .track-mute:hover {
+        background: #ff5252 !important;
+      }
+
+      .volume-control {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .save-load {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin: 20px 0;
+        flex-wrap: wrap;
+      }
+
+      textarea {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
+        padding: 10px;
+        font-family: inherit;
+        resize: vertical;
+        width: 300px;
+        height: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>🎵 Chiptune Composer 🎵</h1>
+      <div class="controls">
+        <button id="initBtn">🎧 Initialize Audio</button>
+        <button id="playBtn" disabled>▶ Play</button>
+        <button id="stopBtn" disabled>⏹ Stop</button>
+        <button id="recordBtn" disabled>⏺ Record MP3</button>
+        <button id="clearBtn">🗑️ Clear All</button>
+      </div>
+    </div>
+
+    <div class="composer">
+      <div class="tempo-section">
+        <label
+          >Tempo:
+          <input type="range" id="tempoSlider" min="60" max="200" value="120"
+        /></label>
+        <div class="tempo-display" id="tempoDisplay">120 BPM</div>
+        <div>Step: <span id="currentStep">0</span> / 32</div>
+        <div style="margin-top: 10px">
+          <label for="resolutionSelect">Step Timing:</label>
+          <select id="resolutionSelect">
+            <option value="16n" selected>16th Notes</option>
+            <option value="8t">8th-Note Triplets</option>
+            <option value="16t">16th-Note Triplets</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="note-selector">
+        <div>Select Note:</div>
+        <button class="note-btn" data-note="C">C</button>
+        <button class="note-btn" data-note="C#">C#</button>
+        <button class="note-btn" data-note="D">D</button>
+        <button class="note-btn" data-note="D#">D#</button>
+        <button class="note-btn" data-note="E">E</button>
+        <button class="note-btn" data-note="F">F</button>
+        <button class="note-btn" data-note="F#">F#</button>
+        <button class="note-btn" data-note="G">G</button>
+        <button class="note-btn" data-note="G#">G#</button>
+        <button class="note-btn" data-note="A">A</button>
+        <button class="note-btn" data-note="A#">A#</button>
+        <button class="note-btn" data-note="B">B</button>
+        <button class="note-btn" data-note="REST">REST</button>
+        <div>
+          Octave:
+          <select id="octaveSelect">
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4" selected>4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="tracks"></div>
+
+      <div class="save-load">
+        <button id="saveBtn">💾 Export Song</button>
+        <button id="loadBtn">📁 Import Song</button>
+        <textarea
+          id="songData"
+          placeholder="Song data will appear here..."
+        ></textarea>
+      </div>
+    </div>
+
+    <script src="./js/chiptuneMulti.js"></script>
+  </body>
+</html>

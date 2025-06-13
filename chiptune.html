@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chiptune Sound Library</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <style>
+      body {
+        font-family: "Courier New", monospace;
+        background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+        color: #ffffff;
+        margin: 0;
+        padding: 20px;
+        min-height: 100vh;
+      }
+
+      .header {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      h1 {
+        color: #4fc3f7;
+        font-size: 2.5em;
+        margin: 0;
+        text-shadow: 0 0 20px rgba(79, 195, 247, 0.5);
+      }
+
+      .sound-categories {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+      }
+
+      .category {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 15px;
+        padding: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .category h3 {
+        color: #feca57;
+        margin-top: 0;
+        font-size: 1.3em;
+        border-bottom: 2px solid rgba(254, 202, 87, 0.3);
+        padding-bottom: 10px;
+      }
+
+      .sound-item {
+        margin: 15px 0;
+        padding: 10px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .sound-info {
+        flex: 1;
+      }
+
+      .sound-name {
+        font-weight: bold;
+        color: #4fc3f7;
+        margin-bottom: 5px;
+      }
+
+      .sound-desc {
+        font-size: 0.9em;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      button {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+        border: none;
+        padding: 8px 15px;
+        border-radius: 15px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: inherit;
+        font-size: 0.9em;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      }
+
+      .controls {
+        text-align: center;
+        margin: 20px 0;
+      }
+
+      .init-btn {
+        background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+        padding: 15px 30px;
+        font-size: 1.2em;
+        border-radius: 25px;
+      }
+
+      .code-example {
+        background: rgba(0, 0, 0, 0.5);
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+        font-family: "Courier New", monospace;
+        font-size: 0.8em;
+        color: #81c784;
+        border-left: 3px solid #4fc3f7;
+      }
+
+      .parameter-control {
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      input[type="range"] {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .param-value {
+        min-width: 40px;
+        color: #feca57;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>🎮 Expanded Chiptune Sound Library 🎮</h1>
+      <div class="controls">
+        <button class="init-btn" id="initBtn">
+          🎧 Initialize Audio System
+        </button>
+      </div>
+    </div>
+
+    <div class="sound-categories">
+      <!-- Classic Chip Waves -->
+      <div class="category">
+        <h3>🔲 Classic Chip Waves</h3>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Pulse Wave (25%)</div>
+            <div class="sound-desc">Classic NES/Gameboy thin pulse</div>
+          </div>
+          <button onclick="playSound('pulse25')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Pulse Wave (12.5%)</div>
+            <div class="sound-desc">Even thinner, more nasal sound</div>
+          </div>
+          <button onclick="playSound('pulse12')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Fat Saw</div>
+            <div class="sound-desc">Detuned sawtooth waves</div>
+          </div>
+          <button onclick="playSound('fatSaw')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">PWM Pulse</div>
+            <div class="sound-desc">Pulse width modulation sweep</div>
+          </div>
+          <button onclick="playSound('pwmPulse')">Play</button>
+        </div>
+
+        <div class="code-example">
+          // Pulse Wave Implementation new Tone.Oscillator({ type: "pulse",
+          width: 0.25 // 25% duty cycle }).toDestination();
+        </div>
+      </div>
+
+      <!-- Percussion & Noise -->
+      <div class="category">
+        <h3>🥁 Percussion & Noise</h3>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">White Noise Snare</div>
+            <div class="sound-desc">Classic drum machine snare</div>
+          </div>
+          <button onclick="playSound('whiteSnare')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Pink Noise Tom</div>
+            <div class="sound-desc">Warmer tom-tom sound</div>
+          </div>
+          <button onclick="playSound('pinkTom')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Brown Noise Kick</div>
+            <div class="sound-desc">Deep, punchy kick drum</div>
+          </div>
+          <button onclick="playSound('brownKick')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Filtered Hihat</div>
+            <div class="sound-desc">High-passed white noise</div>
+          </div>
+          <button onclick="playSound('hihat')">Play</button>
+        </div>
+
+        <div class="code-example">
+          // Noise Synth with Filtering const kick = new Tone.NoiseSynth({
+          noise: { type: "brown" }, envelope: { attack: 0.01, decay: 0.2,
+          sustain: 0 } }).chain(filter, destination);
+        </div>
+      </div>
+
+      <!-- FM Synthesis -->
+      <div class="category">
+        <h3>🌊 FM Synthesis</h3>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">FM Bell</div>
+            <div class="sound-desc">Metallic bell-like tones</div>
+          </div>
+          <button onclick="playSound('fmBell')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">FM Bass</div>
+            <div class="sound-desc">Deep, punchy bass sound</div>
+          </div>
+          <button onclick="playSound('fmBass')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">FM Brass</div>
+            <div class="sound-desc">Bright, brassy lead sound</div>
+          </div>
+          <button onclick="playSound('fmBrass')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">FM Wobble</div>
+            <div class="sound-desc">Modulated wobble bass</div>
+          </div>
+          <button onclick="playSound('fmWobble')">Play</button>
+        </div>
+
+        <div class="code-example">
+          // FM Synthesis const fmSynth = new Tone.FMSynth({ harmonicity: 3,
+          modulationIndex: 10, detune: 0, oscillator: { type: "sine" },
+          envelope: { attack: 0.01, decay: 0.01, sustain: 1, release: 0.5 },
+          modulation: { type: "square" }, modulationEnvelope: { attack: 0.5,
+          decay: 0, sustain: 1, release: 0.5 } }).toDestination();
+        </div>
+      </div>
+
+      <!-- Filtered Sounds -->
+      <div class="category">
+        <h3>🎛️ Filtered & Effects</h3>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Low-Pass Sweep</div>
+            <div class="sound-desc">Filter sweep effect</div>
+          </div>
+          <button onclick="playSound('lpSweep')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">High-Pass Stab</div>
+            <div class="sound-desc">Bright, cutting sound</div>
+          </div>
+          <button onclick="playSound('hpStab')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Resonant Filter</div>
+            <div class="sound-desc">High resonance filter sweep</div>
+          </div>
+          <button onclick="playSound('resonantSweep')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Bitcrushed Square</div>
+            <div class="sound-desc">Lo-fi digital distortion</div>
+          </div>
+          <button onclick="playSound('bitcrush')">Play</button>
+        </div>
+
+        <div class="code-example">
+          // Filtered Sound with LFO const filter = new Tone.Filter(200,
+          "lowpass"); const lfo = new Tone.LFO(2, 100, 2000);
+          lfo.connect(filter.frequency); synth.chain(filter, destination);
+        </div>
+      </div>
+
+      <!-- Retro Game Sounds -->
+      <div class="category">
+        <h3>🕹️ Retro Game FX</h3>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Coin Pickup</div>
+            <div class="sound-desc">Classic arcade coin sound</div>
+          </div>
+          <button onclick="playSound('coin')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Jump Sound</div>
+            <div class="sound-desc">8-bit character jump</div>
+          </div>
+          <button onclick="playSound('jump')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Power Up</div>
+            <div class="sound-desc">Ascending power-up arpeggio</div>
+          </div>
+          <button onclick="playSound('powerup')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Laser Zap</div>
+            <div class="sound-desc">Sci-fi laser sound</div>
+          </div>
+          <button onclick="playSound('laser')">Play</button>
+        </div>
+
+        <div class="code-example">
+          // Game FX Pattern function playPowerUp() { const notes = ["C4", "E4",
+          "G4", "C5"]; notes.forEach((note, i) => {
+          synth.triggerAttackRelease(note, "8n", "+0:" + i); }); }
+        </div>
+      </div>
+
+      <!-- Atmospheric -->
+      <div class="category">
+        <h3>🌌 Atmospheric</h3>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Pad Wash</div>
+            <div class="sound-desc">Ethereal background pad</div>
+          </div>
+          <button onclick="playSound('padWash')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Crystal Bell</div>
+            <div class="sound-desc">Shimmering bell pad</div>
+          </div>
+          <button onclick="playSound('crystalBell')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Wind Sweep</div>
+            <div class="sound-desc">Atmospheric wind effect</div>
+          </div>
+          <button onclick="playSound('windSweep')">Play</button>
+        </div>
+
+        <div class="sound-item">
+          <div class="sound-info">
+            <div class="sound-name">Digital Rain</div>
+            <div class="sound-desc">Matrix-style digital texture</div>
+          </div>
+          <button onclick="playSound('digitalRain')">Play</button>
+        </div>
+
+        <div class="code-example">
+          // Atmospheric Pad const reverb = new Tone.Reverb(8); const pad = new
+          Tone.Synth({ oscillator: { type: "sawtooth" }, envelope: { attack: 2,
+          decay: 1, sustain: 0.8, release: 3 } }).chain(reverb, destination);
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/chiptune.js"></script>
+  </body>
+</html>
