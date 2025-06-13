@@ -192,9 +192,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🔗 Links
 
-- **Live Demo**: [Try Chiptune Composer](https://yourusername.github.io/chiptune-composer)
+- **Live Demo**: [Try Chiptune Composer](https://ninefingerwoodshop.github.io/chiptune-composer)
 - **Issues**: [Report bugs or request features](https://github.com/ninefingerwoodshop/chiptune-composer/issues)
-- **Discussions**: [Join the community](https://github.com/yourusername/chiptune-composer/discussions)
+- **Discussions**: [Join the community](https://github.com/ninefingerwoodshop/chiptune-composer/discussions)
 
 ---
 
