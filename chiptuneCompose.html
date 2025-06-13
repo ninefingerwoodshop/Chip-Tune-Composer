@@ -300,6 +300,12 @@
         </div>
       </div>
 
+      <!-- Pattern Chain UI Container -->
+      <div id="patternChainUI"></div>
+
+      <!-- Swing/Groove UI Container -->
+      <div id="swingUI"></div>
+
       <div class="note-selector">
         <div>Select Note:</div>
         <button class="note-btn" data-note="C">C</button>
@@ -339,6 +345,21 @@
       </div>
     </div>
 
-    <script src="./js/chiptuneMulti.js"></script>
+    <!-- Load Tone and other libraries first -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lamejs@1.2.0/lame.min.js"></script>
+
+    <!-- Load core logic files -->
+    <script src="./js/AudioEngine.js"></script>
+    <script src="./js/Track.js"></script>
+    <script src="./js/Sequencer.js"></script>
+    <script src="./js/PatternChain.js"></script>
+    <script src="./js/PatternChainUI.js"></script>
+    <script src="./js/SwingEngine.js"></script>
+    <script src="./js/SwingUI.js"></script>
+
+    <!-- Load UI and main files with defer -->
+    <script src="./js/UIBindings.js" defer></script>
+    <script src="./js/Main.js" defer></script>
   </body>
 </html>
